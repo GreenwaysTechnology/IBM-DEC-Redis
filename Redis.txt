@@ -990,10 +990,41 @@ HINCRBY - to increment a field value
 5) "status"
 6) "alive"
 127.0.0.1:6379>
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+List:
+-dynamic array
 
 
+Adding elements into list:
+
+Left : head
+ 1,2,3,4,5,6,......
+
+Right : tail
+
+Stack
+  - Last in first out
+Queue
+  - First in first out
 
 
+127.0.0.1:6379> LPUSH message hello
+(integer) 1
+127.0.0.1:6379> LPUSH message world
+(integer) 2
+127.0.0.1:6379> LINDEX message 0
+"world"
+127.0.0.1:6379> LINDEX message 1
+"hello"
+127.0.0.1:6379> LOP message
+(error) ERR unknown command `LOP`, with args beginning with: `message`,
+127.0.0.1:6379> LPOP message
+"world"
+127.0.0.1:6379> LPOP message
+"hello"
+127.0.0.1:6379> LPOP message
+(nil)
+127.0.0.1:6379>
 
 
 
