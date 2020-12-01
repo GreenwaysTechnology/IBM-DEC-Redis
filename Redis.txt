@@ -839,5 +839,170 @@ OK
 127.0.0.1:6379> get user:password
 (nil)
 127.0.0.1:6379>
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Data types:
+:String:
+ -store alphabets
+ -store numbers
+ -store binary.
+no int,float datatype.
+
+There is a limit of 512 megabytes for any string value
+
+JPEGs, Excel spreadsheets, HTML fragments, as well as
+plain old regular text and numbers are permissible.
+
+Internally, Redis stores encoding of the value, stores a knowledge of whether it is a text, number, or binary.
+
+127.0.0.1:6379> SET player:name Sachin
+OK
+127.0.0.1:6379> SET player:avg 4.5
+OK
+127.0.0.1:6379> SET player:score 10
+OK
+127.0.0.1:6379> INCR player:score
+(integer) 11
+127.0.0.1:6379> INCRBY player:score 10
+(integer) 21
+127.0.0.1:6379> INCRBYFloat player:avg 10
+"14.5"
+127.0.0.1:6379> INCRBY player:score -10
+(integer) 11
+127.0.0.1:6379>
+
+Redis internally uses sub types
+
+1.int - 10
+2-float -4.5
+3.pics/any docs - byte[]
+////////////////////////////////////////////////////////////////////////////////////////////////
+Hashes:
+......
+H-SET
+H-GET
+
+Hashes:
+Hashes are used to store collections of key/value pairs. Contrast a
+hash with a simple string data type where there is one value corresponding
+to one key. A hash has one key, but then within that
+structure are more fields and values.
+
+KEY -- Value - single value
+
+KEY - mulitiple key value pair -  json,java hashmap,python python.
+ 
+Hashes are mutable , we can add,change,increment,remove field values
+
+Hashes are schema less , so that we can store any no of field values.
+
+HSET key field value [field value ...]
+
+127.0.0.1:6379> HSET player:1  name  subramanian score 80 status alive
+
+  player:1 
+       {
+         name:'subramanina',
+         score:80,
+         status:'alive'
+       }
+
+
+houseID: 5150
+	numBedrooms: 3
+	squareFeet: 2700
+	hvac: forced air
+
+Commands:
+
+HSET - to add field and values
+HGETALL - to read all hash values
+HGET  - TO get a particular key value
+HSET - to update existing field or add new field value
+HDEL - to delete a field value from existing hash
+HINCRBY - to increment a field value
+
+-Performance :
+ o(1) - all commands
+ o(n) - hgetll
+
+27.0.0.1:6379> HSET player:1  name  subramanian score 80 status alive
+(integer) 3
+127.0.0.1:6379> HGETALL
+(error) ERR wrong number of arguments for 'hgetall' command
+127.0.0.1:6379> HGETALL player:1
+1) "name"
+2) "subramanian"
+3) "score"
+4) "80"
+5) "status"
+6) "alive"
+127.0.0.1:6379> HGET player:1 name
+"subramanian"
+127.0.0.1:6379> HGET player:1 score
+"80"
+127.0.0.1:6379> HGET player:1 status
+"alive"
+127.0.0.1:6379> HSET player:1  position  10
+(integer) 1
+127.0.0.1:6379> HGETALL player:1
+1) "name"
+2) "subramanian"
+3) "score"
+4) "80"
+5) "status"
+6) "alive"
+7) "position"
+8) "10"
+127.0.0.1:6379> HSET player:1  position  100
+(integer) 0
+127.0.0.1:6379> HGETALL player:1
+1) "name"
+2) "subramanian"
+3) "score"
+4) "80"
+5) "status"
+6) "alive"
+7) "position"
+8) "100"
+127.0.0.1:6379> HINCRBY player:1  position  2
+(integer) 102
+127.0.0.1:6379> HGETALL player:1
+1) "name"
+2) "subramanian"
+3) "score"
+4) "80"
+5) "status"
+6) "alive"
+7) "position"
+8) "102"
+127.0.0.1:6379> HEXISTS player:1 position
+(integer) 1
+127.0.0.1:6379> HDEL player:1 position
+(integer) 1
+127.0.0.1:6379> HEXISTS player:1 position
+(integer) 0
+127.0.0.1:6379> HGETALL player:1
+1) "name"
+2) "subramanian"
+3) "score"
+4) "80"
+5) "status"
+6) "alive"
+127.0.0.1:6379>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
