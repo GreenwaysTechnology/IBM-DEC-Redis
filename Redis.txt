@@ -505,30 +505,182 @@ This can be checked before any command operates on the value.
 There are a number of ways to manipulate strings
 as we'll see. First, let's look at incrementing and decrementing
 values.
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Logical Database:
+
+Redis by default supports 16 databases on single server instance.
+
+by default database 0 is selected.
+ 0-15
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Keys:
+....
+
+lab: 
+
+create keyname, differentiate each other.
+
+SET KEY VALUE
+
+object:identier:nestedindifier 
+
+127.0.0.1:6379> SET user:1  away
+OK
+127.0.0.1:6379> SET user:2 online
+OK
+127.0.0.1:6379> set user:3 busy
+OK
+
+SET---------------Request-------Redis-server----execute command----SUCCESS
+--OK
+
+create keyname with case senstive
+
+ registerusers:1000:followers
+ Registerusers:1000:followers
+ RegisterUsers:1000:followers
+ registerUsers:1000:followers
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+key values by default is overriden.
 
 
+127.0.0.1:6379> set user:name Subramanian
+OK
+127.0.0.1:6379> get user:name
+"Subramanian"
+127.0.0.1:6379> set user:name ram
+OK
+127.0.0.1:6379> get user:name
+"ram"
+127.0.0.1:6379> set user:name 100
+OK
+127.0.0.1:6379> get user:name
+"100"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Getting all keys from the database:
 
 
+127.0.0.1:6379> KEYS *
+ 1) "mynums"
+ 2) "user:3"
+ 3) "customer:2000"
+ 4) "friends:duncan"
+ 5) "players:friends"
+ 6) "user:1"
+ 7) "user:101:time-zone"
+ 8) "Registerusers:2000"
+ 9) "registerUsers:5000"
+10) "Registeruser:2000"
+11) "user:name"
+12) "registerusers:1000"
+13) "userFollowers"
+14) "user:2"
+15) "customer:1000"
+16) "user:1:count"
+17) "player:20"
+18) "inventory:1"
+19) "players:online"
+
+KEYS VS SCAN
+
+Keys
+-Blocks until complete
+   lets say database contains million keys, it blocks database long time
+ Recommendation : dont use in production, use it in dev and testing env only.
+
+Scan :
+  iterates over cursor
+  it also blocks but only iterates over handful  of keys at  the time.
+  Returns slot references
+  May return 0 or more keys per call.
+  Safe for production.
+
+127.0.0.1:6379> scan 0 MATCH *
+1) "29"
+2)  1) "customer:2000"
+    2) "friends:duncan"
+    3) "user:3"
+    4) "players:friends"
+    5) "user:2"
+    6) "mynums"
+    7) "user:name"
+    8) "user:1:count"
+    9) "userFollowers"
+   10) "user:101:time-zone"
+   11) "Registerusers:2000"
+   12) "registerUsers:5000"
+127.0.0.1:6379> scan 29 MATCH *
+1) "0"
+2) 1) "inventory:1"
+   2) "registerusers:1000"
+   3) "user:1"
+   4) "player:20"
+   5) "customer:1000"
+   6) "Registeruser:2000"
+   7) "players:online"
+127.0.0.1:6379>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+127.0.0.1:6379> scan 0 MATCH *
+1) "29"
+2)  1) "customer:2000"
+    2) "friends:duncan"
+    3) "user:3"
+    4) "players:friends"
+    5) "user:2"
+    6) "mynums"
+    7) "user:name"
+    8) "user:1:count"
+    9) "userFollowers"
+   10) "user:101:time-zone"
+   11) "Registerusers:2000"
+   12) "registerUsers:5000"
+127.0.0.1:6379> scan 29 MATCH *
+1) "0"
+2) 1) "inventory:1"
+   2) "registerusers:1000"
+   3) "user:1"
+   4) "player:20"
+   5) "customer:1000"
+   6) "Registeruser:2000"
+   7) "players:online"
+127.0.0.1:6379> scan 29 MATCH *  COUNT 5
+1) "15"
+2) 1) "inventory:1"
+   2) "registerusers:1000"
+   3) "user:1"
+   4) "player:20"
+   5) "customer:1000"
+127.0.0.1:6379> scan 0 MATCH *  COUNT 5
+1) "14"
+2) 1) "customer:2000"
+   2) "friends:duncan"
+   3) "user:3"
+   4) "players:friends"
+   5) "user:2"
+127.0.0.1:6379> scan 14 MATCH *  COUNT 5
+1) "29"
+2) 1) "mynums"
+   2) "user:name"
+   3) "user:1:count"
+   4) "userFollowers"
+   5) "user:101:time-zone"
+   6) "Registerusers:2000"
+   7) "registerUsers:5000"
+127.0.0.1:6379> scan 29 MATCH *  COUNT 5
+1) "15"
+2) 1) "inventory:1"
+   2) "registerusers:1000"
+   3) "user:1"
+   4) "player:20"
+   5) "customer:1000"
+127.0.0.1:6379>
 
 
 
