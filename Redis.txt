@@ -1134,4 +1134,59 @@ Union : eleminate common elements
 7) "g"
 127.0.0.1:6379>
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+Sorted Set:
+  
+ Set is not sorted but sorted set , we can sort by asc /desc order.
+
+redis 127.0.0.1:6379> ZADD tech 1 redis 
+(integer) 1 
+redis 127.0.0.1:6379> ZADD tech 2 mongodb 
+(integer) 1 
+redis 127.0.0.1:6379> ZADD tech 3 mysql 
+(integer) 1 
+redis 127.0.0.1:6379> ZADD tech 3 mysql 
+(integer) 0 
+redis 127.0.0.1:6379> ZADD tech 4 mysql 
+(integer) 0 
+redis 127.0.0.1:6379> ZRANGE tech 0 10 WITHSCORES 
+
+
+Try all commands of set with sorted set
+
+ZSet  ====> noduplicates  +ordering
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SET
+HSET
+ZADD
+LPUSH
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Transaction:
+
+  Grouping set of commands as a single unit called transaction.
+
+ COMMIT  - ALL Success
+ rollback - revert
+
+ Sequences of commands you can send
+
+ MULTI
+ EXEC
+ DISCARD
+
+Transaction will be enabled with more than one connections.
+
+Lab:
+ 
+ 
+
+
+
+
+
+
+
 
