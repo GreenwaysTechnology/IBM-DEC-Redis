@@ -1180,9 +1180,18 @@ Transaction:
 Transaction will be enabled with more than one connections.
 
 Lab:
- 
- 
 
+  MULTI
+OK
+> INCR foo
+QUEUED
+> INCR bar
+QUEUED
+> EXEC
+1) (integer) 1
+2) (integer) 1
+ 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
