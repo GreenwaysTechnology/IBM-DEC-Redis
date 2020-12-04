@@ -409,6 +409,66 @@ OK
 127.0.0.1:6379> ACL WHOAMI
 "default"
 1
+////////////////////////////////////////////////////////////////////////////////////////////
+
+Singal Hanlding:
+
+Log files:
+redis server maintains a logfile can be configured in redis.conf
+logfile "server.log"
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+Replication Lab:
+Use case :
+
+1 master , two replicas 
+
+On the first terminal, start the master redis-server on port 5555:
+$ redis-server --port 5555
+
+On the second terminal, start the first slave on port 6666:
+$ redis-server --port 6666 --slaveof 127.0.0.1 5555
+
+On the third terminal, start the second slave on port 7777:
+$ redis-server --port 7777 --slaveof 127.0.0.1 5555
+
+At this point, there is a master with two replicas running.
+On the fourth terminal, check whether the replication is working:
+
+$ redis-cli -p 5555 
+SET testkey testvalue
+OK
+$ redis-cli -p 6666 
+GET testkey
+"testvalue"
+$ redis-cli -p 7777 
+GET testkey
+"testvalue"
+
+-All read operations are handled by slaves
+-All write operations are handled by master.
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+Replications with Failure : When master dies, How to Promote slave as master:
+.............................................................................
+
+-The command SLAVEOF NO ONE converts a slave into a master instance, and it
+should be used in a failover scenario.
+
+Killing master instance ; to test fail over
+
+$ redis-cli -p 5555 DEBUG SEGFAULT
+
+Promote Slave as Master
+
+$ redis-cli -p 6666 SLAVEOF NO ONE
+
+Run slave
+$ redis-cli -p 7777 SLAVEOF 127.0.0.1 6666
+
+
+
 
 
 
